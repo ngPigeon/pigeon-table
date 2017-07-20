@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" data-ng-app="pigeon-table" data-ng-cloak>
+<head>
+    <title>Example</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <!-- Bootstrap -->
+    <link href="pigeon-table/css/bootstrap.min.css" rel="stylesheet" />
+</head>  
+<body>
+    
+    <div class="container">
+        
+        <!-- View Data in table form -->
+        <pigeon-table query="SELECT * FROM table_name" editable="true / false"></pigeon-table>
+        
+    </div>
+    
+    <!-- jQuery – required for Bootstrap's JavaScript plugins) -->
+    <script src="pigeon-table/js/jquery.min.js"></script>
+    <!-- All Bootstrap plug-ins file -->
+    <script src="pigeon-table/js/bootstrap.min.js"></script>
+    <!-- AngularJS -->
+    <script src="pigeon-table/js/angular.min.1.6.4.js"></script>
+    <!-- AngularJS Cookie -->
+    <script src="pigeon-table/js/angular-cookies.min.js"></script>
+    <!-- Pigeon Table -->
+    <script src="pigeon-table/js/pigeon-table.js"></script> 
+    
+</body>
+</html>
