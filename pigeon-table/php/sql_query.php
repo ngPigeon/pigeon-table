@@ -114,12 +114,87 @@ if (strpos($sqlQuery->sql, 'SELECT') !== false) {
                         } else {
                             $msg[] = "Please insert number only";  
                         }
-                    } else {
-                        //Check the length of the data
-                        if (strlen($value) <= $length) {
+                    } else if (preg_match("/(datetime)/i", $row['Type'])) {
+                        if (preg_match("/^(1[0-9]{3}|[1-9][0-9]{3})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\s([0-1][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$/", $value)) {
+                            DateTime::createFromFormat('Y-m-d H:i:s', $value);
+                            $error = DateTime::getLastErrors();
+                            if ($error['warning_count'] > 0) {
+                                $msg[] = "Please insert valid date and time.";
+                            } else {
+                                $msg[] = "Validated";
+                                $colField .= "'".$value."', ";
+                                $updateValue .= "$key = '".$value."', ";
+                            }
+                        } else {
+                            $msg[] = "Please insert correct date and time format (yyyy-mm-dd HH:mm:ss).";
+                        }
+                    } else if (preg_match("/(timestamp)/i", $row['Type'])) {
+                        if (preg_match("/^(19[7-9][0-9]|20[0-2][0-9]|20[3][0-7])-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\s([0-1][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$/", $value)) {
+                            DateTime::createFromFormat('Y-m-d H:i:s', $value);
+                            $error = DateTime::getLastErrors();
+                            if ($error['warning_count'] > 0) {
+                                $msg[] = "Please insert valid date and time of timestamp.";
+                            } else {
+                                $msg[] = "Validated";
+                                $colField .= "'".$value."', ";
+                                $updateValue .= "$key = '".$value."', ";
+                            }
+                        } else {
+                            $msg[] = "Please insert correct timestamp format yyyy-mm-dd HH:mm:ss (Range: 1970-01-01 00:00:01 to 2037-12-31 23:59:59)";
+                        }
+                    } else if (preg_match("/(date)/i", $row['Type'])) {
+                        if (preg_match("/^[1-9][0-9]{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/", $value)) {
+                            DateTime::createFromFormat('Y-m-d', $value);
+                            $error = DateTime::getLastErrors();
+                            if ($error['warning_count'] > 0) {
+                                $msg[] = "Please insert valid date.";
+                            } else {
+                                $msg[] = "Validated";
+                                $colField .= "'".$value."', ";
+                                $updateValue .= "$key = '".$value."', ";
+                            }
+                        } else {
+                            $msg[] = "Please insert correct date format yyyy-mm-dd (Range: 1000-01-01 to 9999-12-31)";
+                        }
+                    } else if (preg_match("/(time)/i", $row['Type'])) {
+                        if (preg_match("/^(([0-7][0-9]{2}|8[0-2][0-9]|83[0-8]|\d{2})|(-[0-7][0-9]{2}|-8[0-2][0-9]|-83[0-8]|-\d{2})):([0-5][0-9]):([0-5][0-9])$/", $value)) {
                             $msg[] = "Validated";
                             $colField .= "'".$value."', ";
                             $updateValue .= "$key = '".$value."', ";
+                        } else {
+                            $msg[] = "Please insert valid time within range -838:59:59 to 838:59:59";
+                        }
+                    } else if (preg_match("/(year)/i", $row['Type'])) {
+                        if (preg_match("/^(190[1-9]|19[1-9][0-9]|20[0-9]{2}|21[0-4][0-9]|215[0-5])$/", $value)) {
+                            $msg[] = "Validated";
+                            $colField .= "'".$value."', ";
+                            $updateValue .= "$key = '".$value."', ";
+                        } else {
+                            $msg[] = "Please insert valid year within range 1901 to 2155";
+                        }
+                    } else {
+                        //Check if string type
+                        if (strlen($value) <= $length) {
+                            //Check if the column is primary and unique key
+                            if (($row['Key'] == "PRI" || $row['Key'] == "UNI") && strpos($sqlQuery->sqlType, 'INSERT') !== false) {
+                                $existed = false;
+                                foreach ($data as $colVal) {
+                                    if ($colVal[$key] == $value) {
+                                        $msg[] = "The data is existed. Please insert another data.";
+                                        $existed = true;
+                                    } 
+                                }
+                                //Store value into variable if the data is not existed
+                                if ($existed == false) {
+                                    $msg[] = "Validated";
+                                    $colField .= "'".$value."', ";
+                                    $updateValue .= "$key = '".$value."', ";
+                                }
+                            } else {
+                                $msg[] = "Validated";
+                                $colField .= "'".$value."', ";
+                                $updateValue .= "$key = '".$value."', ";
+                            }
                         } else {
                             $msg[] = "Please insert your input less than $length";
                         }

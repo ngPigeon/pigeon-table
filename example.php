@@ -1,25 +1,25 @@
-<?php
-
-echo "
 <!DOCTYPE html>
-<html lang='en' data-ng-app='pigeon-table' data-ng-cloak>
+
+<!-- data-ng-app="pigeon-table" in the html is essential to inject ngPigeon-table into the webpage-->
+<html lang="en" data-ng-app="pigeon-table" data-ng-cloak>
 <head>
-    <title>Example</title>";
+    <title>Example</title>
+	<!-- The includes.php file is required to include all necessary dependencies-->
+    <?php
+		include "pigeon-table/php/includes.php"
+	?>
     
-    include "pigeon-table/php/includes.php";
-    
-echo "</head>";  
-echo"
+</head> 
+
 <body>
     
-    <div class='container'>
-        
+    <div class="container">
+        <h1>Users</h1>
         <!-- View Data in table form -->
-        <pigeon-table query='SELECT * FROM table_name' editable='true / false'></pigeon-table>
+        <pigeon-table query="SELECT * FROM dummy" editable="true"></pigeon-table>
         
     </div>
     
 </body>
-</html>";
+</html>
 
-?>

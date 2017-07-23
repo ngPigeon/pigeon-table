@@ -1,0 +1,84 @@
+.caret-up    {
+    width: 9px;
+    padding-left: 1px;
+    filter: opacity(25%);
+}
+.caret-down    {
+    width: 9px;
+    padding-left: 1px;
+    filter: opacity(25%);
+}
+
+.caret-full     {
+    width: 12px;
+    filter: opacity(25%);
+}
+
+.caret-up:hover {
+    filter: opacity(100%);
+}
+
+.caret-down:hover {
+    filter: opacity(100%);
+}
+
+.table-header:hover > span > img   {
+    filter: opacity(100%);
+}
+
+.no-padding-right   {
+    padding-right: 0;
+}
+
+#editableHeader {
+    width: 10%;
+}
+
+#insertBtn  {
+    float: right;
+}
+
+#pagBtn {
+    float: left;
+    padding-left: 55px;
+}
+
+.no-margin  {
+    margin: 0;
+}
+
+/* For desktop view */
+@media (max-width: 1200px) {
+    #pagBtn {
+        padding-left: 25px;
+    }
+}
+
+/* For tablet view */
+@media (max-width: 992px) {
+    #insertBtn  {
+        float: none;
+        display: flex;
+        justify-content: center;
+    }
+    #pagBtn {
+        float: none;
+        display: flex;
+        justify-content: center;
+        padding-left: 0;
+    }
+}
+
+/* For mobile view */
+@media (max-width: 768px) {
+    #insertBtn  { 
+        float: none;
+        display: flex;
+        justify-content: center;
+    } 
+    #pagBtn {
+        float: none;
+        display: flex;
+        justify-content: center;
+    }
+}

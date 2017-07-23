@@ -3,17 +3,17 @@
 </div>
 
 <div data-ng-if="error == false">
-    <div class="form-horizontal col-sm-12">
-        <div class="form-group col-sm-4">
-            <label class="control-label col-sm-3" for="search">Search: </label>
-            <div class="col-sm-9">
+    <div class="form-horizontal col-xs-12 col-sm-12 col-md-12">
+        <div class="form-group col-sm-6 col-md-4">
+            <label class="control-label col-sm-4 col-md-3" for="search">Search: </label>
+            <div class="col-sm-8 col-md-9">
                 <input type="text" id="search" class="form-control" data-ng-model="search[col]" />
             </div>
         </div>
 
-        <div class="form-group col-sm-4">
-            <label class="control-label col-sm-4" for="sort">Search By: </label>
-            <div class="col-sm-8">
+        <div class="form-group col-sm-6 col-md-4">
+            <label class="control-label col-sm-5 col-md-5" for="sort">Search By: </label>
+            <div class="col-sm-7 col-md-7">
                 <select id="sort" class="form-control" data-ng-model="col" data-ng-change="clearSearch()">
                     <option value="$">All</option>
                     <option data-ng-repeat="(key, result) in data[0]" value="{{key}}">{{key}}</option>
@@ -21,34 +21,10 @@
             </div>
         </div>
         
-        <div class="col-sm-4" style="float: right; padding-right: 0;">
-            <button type="button" class="btn btn-info pull-right" data-ng-show="btn == true && data != null" data-toggle="modal" data-target="#insertModal">Insert</button>
-        </div>
-    </div>
-    
-    <div class="form-horizontal col-sm-12">
-        <div class="form-group col-sm-4">
-            <label class="control-label col-sm-3" for="exclude">Exclude: </label>
-            <div class="col-sm-9">
-                <input type="text" id="exclude" class="form-control" data-ng-model="exclude[excludeCol]" />
-            </div>
-        </div>
-
-        <div class="form-group col-sm-4">
-            <label class="control-label col-sm-4" for="excludeSort">Exclude By: </label>
-            <div class="col-sm-8">
-                <select id="excludeSort" class="form-control" data-ng-model="excludeCol" data-ng-change="updateCol(excludeCol)">
-                    <option value="$">All</option>
-                    <option data-ng-repeat="(key, result) in data[0]" value="{{key}}">{{key}}</option>
-                </select>
-            </div>
-        </div>
-        
-        
-        <div class="form-group col-sm-2" style="width:22%;">
-            <label class="control-label col-sm-6" for="numRow">No. of row: </label>
-            <div class="col-sm-5" style="padding-right:0;">
-                <select id="numRow" class="form-control" data-ng-model="displayRow" data-ng-change="updateRow(displayRow)" style="width:90%;">
+        <div class="form-group col-sm-6 col-md-3">
+            <label class="control-label col-sm-4 col-md-7" for="numRow">No. of row: </label>
+            <div class="col-sm-8 col-md-5">
+                <select id="numRow" class="form-control" data-ng-model="displayRow" data-ng-change="updateRow(displayRow)">
                     <option value="5">5</option>
                     <option data-ng-hide="data.length < 10" value="10">10</option>
                     <option data-ng-hide="data.length < 15" value="15">15</option>
@@ -56,26 +32,61 @@
                     <option data-ng-hide="data.length < 25" value="25">25</option>
                     <option data-ng-hide="data.length < 50" value="50">50</option>
                     <option data-ng-hide="data.length < 100" value="100">100</option>
+                    <option value="all">All</option>
                 </select>
             </div>
         </div>
         
-        <div class="form-group col-sm-2" style="float: right; width: 22%;" data-ng-init="pageCount(); range();">
-            <tr>
-                <td colspan="{{colNum}}">
-                    <ul class="pagination pull-right" style="margin: 0;">
-                        <li data-ng-class="prevPageDisabled()">
-                            <a href="" data-ng-click="prevPage()">Prev</a>
-                        </li>
-                        <li data-ng-repeat="n in numForPagiBtns | offsetPageBtn:currentPage | limitTo:3" data-ng-class="{active: n == currentPage}" data-ng-click="setPage(n)">
-                            <a href="">{{n+1}}</a>
-                        </li>
-                        <li data-ng-class="nextPageDisabled()">
-                            <a href="" data-ng-click="nextPage()">Next</a>
-                        </li>
-                    </ul>
-                </td>
-            </tr>
+        <div class="col-sm-6 col-md-1">
+            <div id="insertBtn">
+                <button type="button" class="btn btn-info" data-ng-show="btn == true && data != null" data-toggle="modal" data-target="#insertModal">Insert</button>
+            </div>
+            
+        </div>
+    </div>
+    
+    <div class="form-horizontal col-xs-12 col-sm-12 col-md-12">
+        <div class="form-group col-sm-6 col-md-4">
+            <label class="control-label col-sm-4 col-md-3" for="exclude">Exclude: </label>
+            <div class="col-sm-8 col-md-9">
+                <input type="text" id="exclude" class="form-control" data-ng-model="exclude[excludeCol]" />
+            </div>
+        </div>
+
+        <div class="form-group col-sm-6 col-md-4">
+            <label class="control-label col-sm-5 col-md-5" for="excludeSort">Exclude By: </label>
+            <div class="col-sm-7 col-md-7">
+                <select id="excludeSort" class="form-control" data-ng-model="excludeCol" data-ng-change="clearExclude(); updateCol(excludeCol)">
+                    <option value="$">All</option>
+                    <option data-ng-repeat="(key, result) in data[0]" value="{{key}}">{{key}}</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="form-group col-sm-12 col-md-4 no-padding-right" data-ng-init="pageCount(); range();">
+            <div id="pagBtn">
+                <tr>
+                    <td colspan="{{colNum}}">
+                        <ul class="pagination no-margin">
+                            <li data-ng-class="prevPageDisabled()">
+                                <a href="" data-ng-click="firstPage()">&#60;&#60;</a>
+                            </li>
+                            <li data-ng-class="prevPageDisabled()">
+                                <a href="" data-ng-click="prevPage()">&#60;</a>
+                            </li>
+                            <li data-ng-repeat="n in numForPagiBtns | offsetPageBtn:currentPage | limitTo:3" data-ng-class="{active: n == currentPage}" data-ng-click="setPage(n)">
+                                <a href="">{{n+1}}</a>
+                            </li>
+                            <li data-ng-class="nextPageDisabled()">
+                                <a href="" data-ng-click="nextPage()">&#62;</a>
+                            </li>
+                            <li data-ng-class="nextPageDisabled()">
+                                <a href="" data-ng-click="lastPage()">&#62;&#62;</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+            </div>
         </div>
     </div>
     
@@ -85,26 +96,28 @@
         <p>0 rows of record.</p>
     </div>
     
-    <div data-ng-if="data != null">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th data-ng-repeat="(key, result) in data[0]" data-ng-click="orderBy(key)"><a href="">{{key}}</a></th>
-                    <th data-ng-show="btn == true" style="width:10%;">Edit/ Delete</th>
-                </tr>
-            </thead>
+    <div class="col-xs-12 col-sm-12 col-md-12">
+        <div data-ng-if="data != null" class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th data-ng-repeat="(key, result) in data[0]" data-ng-click="orderBy(key)" id="{{key}}"><a href="" class="table-header">{{key}}<span><img class="caret-full" src="pigeon-table/images/caret_full.png"</img></span></a></th>
+                        <th id="editableHeader" data-ng-show="btn == true">Edit/ Delete</th>
+                    </tr>
+                </thead>
 
-            <tbody>
-                <tr data-ng-repeat="user in filtered = (data | filter:search | filter:exclusion) | orderBy:myOrderBy | offset: currentPage*rowPerPage | limitTo: rowPerPage">
-                    <td data-ng-repeat="field in user">{{field}}</td>
-                    <td data-ng-show="btn == true">
-                        <button class="btn btn-warning" data-toggle="modal" data-target="#editModal" data-ng-click="editBtn(user)"><span class="glyphicon glyphicon-edit"></span></button>
-                        <button class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" data-ng-click="deleteBtn(user)"><span class="glyphicon glyphicon-trash"></span></button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        {{filter(filtered)}}
+                <tbody>
+                    <tr data-ng-repeat="user in filtered = (data | filter:search | filter:exclusion) | orderBy:myOrderBy | offset: currentPage*rowPerPage | limitTo: rowPerPage">
+                        <td data-ng-repeat="field in user">{{field}}</td>
+                        <td data-ng-show="btn == true">
+                            <button class="btn btn-warning" data-toggle="modal" data-target="#editModal" data-ng-click="editBtn(user)"><span class="glyphicon glyphicon-edit"></span></button>
+                            <button class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" data-ng-click="deleteBtn(user)"><span class="glyphicon glyphicon-trash"></span></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            {{filter(filtered)}}
+        </div>
     </div>
 </div>
 
@@ -121,7 +134,7 @@
                         <label class="control-label col-sm-2" for="{{key}}">{{key}}:</label>
                         <div class="col-sm-10">
                             <input type="text" class="form-control" id="{{key}}" data-ng-model="form[key]">
-                            <span data-ng-show="validateMsg[$index] != 'Validated'">{{validateMsg[$index]}}</span>
+                            <span data-ng-show="validateMsg[$index] != 'Validated'" style="color:red; font-style:italic;">{{validateMsg[$index]}}</span>
                         </div>
                     </div>
                 </form>
@@ -147,8 +160,8 @@
                         <label class="control-label col-sm-2" for="{{key}}">{{key}}:</label>
                         <div class="col-sm-10">
                             <input type="text" class="form-control" id="{{key}}" data-ng-model="selectedData[key]" data-ng-readonly="keyTable[$index]['Key'] == 'PRI'">
-                            <span data-ng-show="existed == key">The data is existed. Please insert another data.</span>
-                            <span data-ng-show="validateMsg[$index] != 'Validated'">{{validateMsg[$index]}}</span>
+                            <span data-ng-show="existed == key" style="color:red; font-style:italic;">The data is existed. Please insert another data.</span>
+                            <span data-ng-show="validateMsg[$index] != 'Validated'" style="color:red; font-style:italic;">{{validateMsg[$index]}}</span>
                         </div>
                     </div>
                 </form>

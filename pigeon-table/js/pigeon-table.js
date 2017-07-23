@@ -86,7 +86,7 @@ app.directive("pigeonTable", function ($parse, $http, $cookies) {
             }
             
             //Set table as readonly if aggregrate function of table is detected
-            if (scope.query.includes("GROUP BY")) {
+            if (scope.query.includes("GROUP BY") || scope.query.includes("JOIN")) {
                 scope.btn = false;
             }
             
@@ -102,8 +102,17 @@ app.directive("pigeonTable", function ($parse, $http, $cookies) {
                 scope.search = {};
             };
             
+            //Clear exclude inpput field when the filter is chosen
+            scope.clearExclude = function () {
+                scope.exclude = {};
+            };
+            
             scope.updateRow = function (item) {
-                scope.rowPerPage = item;
+                if (item === "all") {
+                    scope.rowPerPage = scope.data.length;
+                } else {
+                    scope.rowPerPage = item;
+                }
             };
             
             //Update the value of column
@@ -230,9 +239,22 @@ app.directive("pigeonTable", function ($parse, $http, $cookies) {
             
             scope.orderBy = function (key) {
                 
+                //Set all column to caret full
+                $('.table-header > span > img').attr("class", "caret-full");
+                $('.table-header > span > img').attr("src", "pigeon-table/images/caret_full.png");
+                
                 //Ascending Order
                 if (reverse === false) {
-                    scope.myOrderBy = key;
+                    if (key.includes(" ")) {
+                        scope.myOrderBy = '"' + key + '"';
+                    } else {
+                        scope.myOrderBy = key;
+                    }
+                    
+                    //Set header caret to up.
+                    $('#' + key + ' > a > span > img').attr("class", "caret-up");
+                    $('#' + key + ' > a > span > img').attr("src", "pigeon-table/images/caret_up.png");
+                    
                     reverse = true;
                     //Array sorting
                     scope.data.sort(function (a, b) {
@@ -244,7 +266,7 @@ app.directive("pigeonTable", function ($parse, $http, $cookies) {
                             if (nameA < nameB) {
                                 return -1;
                             }
-                            
+
                             if (nameA > nameB) {
                                 return 1;
                             }
@@ -252,10 +274,18 @@ app.directive("pigeonTable", function ($parse, $http, $cookies) {
                             // names must be equal
                             return 0;
                         }
-                        
                     });
                 } else {
-                    scope.myOrderBy = "-" + key;
+                    if (key.includes(" ")) {
+                        scope.myOrderBy = '"-' + key + '"';
+                    } else {
+                        scope.myOrderBy = "-" + key;
+                    }
+                    
+                    //Set header caret to down.
+                    $('#' + key + ' > a > span > img').attr("class", "caret-down");
+                    $('#' + key + ' > a > span > img').attr("src", "pigeon-table/images/caret_down.png");
+                    
                     reverse = false;
                     //Array sorting
                     scope.data.sort(function (a, b) {
@@ -264,11 +294,11 @@ app.directive("pigeonTable", function ($parse, $http, $cookies) {
                         } else {
                             var nameA = a[key].toLowerCase(); // ignore upper and lowercase
                             var nameB = b[key].toLowerCase(); // ignore upper and lowercase
-                            
+
                             if (nameB < nameA) {
                                 return -1;
                             }
-                            
+
                             if (nameB > nameA) {
                                 return 1;
                             }
@@ -328,6 +358,11 @@ app.directive("pigeonTable", function ($parse, $http, $cookies) {
                 }
             };
 
+            //Set the current page to the first page.
+            scope.firstPage = function () {
+                scope.currentPage = 0;
+            };
+            
             //Disable the previous button if the current page is 0 (html view is 1)
             scope.prevPageDisabled = function () {
                 return scope.currentPage === 0 ? "disabled" : "";
@@ -340,6 +375,11 @@ app.directive("pigeonTable", function ($parse, $http, $cookies) {
                 }
             };
 
+            //Set the current page to the last page.
+            scope.lastPage = function () {
+                scope.currentPage = scope.numForPagiBtns.length - 1;
+            };
+            
             //Disable the next button if the current page is 4 (html view is 5)
             scope.nextPageDisabled = function () {
                 return scope.currentPage === scope.numOfRow ? "disabled" : "";
