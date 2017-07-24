@@ -3,9 +3,11 @@ Pigeon Table is a tool that used to display out MySQL table data into tabular fo
 
 # Basic Setup
 The first step is to copy this tool into your project root directory. After that, inject module name *data-ng-app="pigeon-table"* into HTML tag.
+<br />
 ![Module Name](https://image.ibb.co/kjgRLQ/module_Name.png)
 
 Make sure you are including the Bootstrap and Pigeon Table CSS file, as well as the Pigeon Table, jQuery, Bootstrap and AngularJS JavaScript files, in the <head> of your project. jQuery, Bootstrap and AngularJS must be loaded before Pigeon Table JavaScript.
+<br />
 ![Link CSS and JS](https://preview.ibb.co/fA0Tjk/Untitled.png)
 
 If your website is running on PHP, you can insert the "includes.php" file into your PHP project instead of insert CSS and JS file one by one. The "includes.php" file is located in "pigeon-table/php/includes.php"
@@ -25,10 +27,12 @@ In order to display data in tabular form, you are required to insert the MySQL q
 
 # Tabular Display
 The data will be displayed in table form. The table is styled with Bootstrap table template. The table is created with dynamic rows and columns.
+<br />
 ![Tabular View](https://preview.ibb.co/iDyLEk/tabular_view.png)
 
 # Sortable
 The data can be sorted to ascending or descending order. You can change the order by click on the title of the column in the table.
+<br />
 ![sortable](https://preview.ibb.co/miNxuk/sortable.png)
 
 # Searchable
@@ -49,6 +53,7 @@ You can edit the data of every row. By default, the primary key input field is u
 
 # Delete (CRUD Operation)
 You can delete the data of each row by clicking on the delete button. A delete confirmation box will pop out before perform deletion.
+<br />
 ![Deletion](https://preview.ibb.co/bNTqfQ/deletion.png)
 
 *Note: For best experience of CRUD operation, make sure your MySQL table contains primary key.
