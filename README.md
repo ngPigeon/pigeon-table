@@ -1,5 +1,5 @@
 # pigeon-table
-Tabular data display, sortable, searchable, excludable, CRUD operation and retrieve data from MySQL Database by using MySQL Query Command.
+Dynamic tabular data display, sortable, searchable, excludable, CRUD operation and retrieve data from MySQL Database by using MySQL Query Command.
 
 # Basic Setup
 The first step is to copy this tool into your project root directory. After that, inject module name *data-ng-app="pigeon-table"* into HTML tag.
