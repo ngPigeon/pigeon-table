@@ -19,7 +19,9 @@ if (strpos($sqlQuery->sql, 'SELECT') !== false) {
     $sql=$sqlQuery->sql;
     $rs=$dbhandle->query($sql);
     
-    if ($dbhandle->error) {
+    if ($dbhandle->connect_error) {
+        print_r($dbhandle->connect_error);
+    } else if ($dbhandle->error) {
         print_r($dbhandle->error);
     } else {
         while($row=$rs->fetch_array(MYSQLI_ASSOC)){
