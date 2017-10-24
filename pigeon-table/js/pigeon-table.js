@@ -27,8 +27,8 @@ app.directive("pigeonTable", function ($parse, $http, $cookies) {
     var direc = {};
     direc.restrict = "E";
     
-    direc.controller = "myCtrl";
-    
+    //direc.controller = "myCtrl";
+
     direc.scope = {
         query : "@",
         editable: "=editable"
@@ -37,10 +37,10 @@ app.directive("pigeonTable", function ($parse, $http, $cookies) {
     
     direc.compile = function () {
         var linkFunction = function (scope, element, attributes) {
-            
             if (scope.query.includes("SELECT")) {
                 $http.post("pigeon-table/php/sql_query.php", {'sql': scope.query})
                     .then(function (response) {
+                        scope.isLoading = true;
                         //if returned data is string form which is error message, execute this
                         if ((typeof response.data) === "string") {
                             scope.msg = response.data;
@@ -48,6 +48,13 @@ app.directive("pigeonTable", function ($parse, $http, $cookies) {
                         } else {
                             scope.data = response.data.data;
                             scope.keyTable = response.data.keyTable;
+                            scope.isLoading = false;
+                            /*
+                            setTimeout(function () {
+                                scope.isLoading = false;
+                                scope.$digest();
+                            }, 2000);
+                            */
                             scope.error = false;
                         }
                     
@@ -113,6 +120,8 @@ app.directive("pigeonTable", function ($parse, $http, $cookies) {
                 } else {
                     scope.rowPerPage = item;
                 }
+                //Set to first page
+                scope.setPage(0);
             };
             
             //Update the value of column
@@ -212,12 +221,14 @@ app.directive("pigeonTable", function ($parse, $http, $cookies) {
                                 }
                             }
                             scope.data.push(form);
-                            //order by first column when page is loaded.
+                            //order by first column.
                             reverse = false;
                             scope.orderBy(Object.keys(scope.data[0])[0]);
+                            scope.clearMsg();
                             $('#insertModal').modal('hide');
                         } else if (response.data === "Updated") {
                             scope.data[scope.data.indexOf(scope.editData)] = form;
+                            scope.clearMsg();
                             $('#editModal').modal('hide');
                         } else if (typeof response.data === "string") {
                             scope.existed = response.data;
@@ -237,7 +248,18 @@ app.directive("pigeonTable", function ($parse, $http, $cookies) {
                     });
             };
             
+            scope.clearMsg = function () {
+                scope.validateMsg = "";
+            }
+            
+            scope.clearForm = function () {
+                for (var key in scope.form) {
+                    scope.form[key] = "";
+                }
+            }
+            
             scope.orderBy = function (key) {
+                
                 
                 //Set all column to caret full
                 $('.table-header > span > img').attr("class", "caret-full");
@@ -256,6 +278,7 @@ app.directive("pigeonTable", function ($parse, $http, $cookies) {
                     $('#' + key + ' > a > span > img').attr("src", "pigeon-table/images/caret_up.png");
                     
                     reverse = true;
+                    
                     //Array sorting
                     scope.data.sort(function (a, b) {
                         if ((typeof scope.data[0][key]) === "number") {
@@ -266,15 +289,18 @@ app.directive("pigeonTable", function ($parse, $http, $cookies) {
                             if (nameA < nameB) {
                                 return -1;
                             }
-
+                            
                             if (nameA > nameB) {
                                 return 1;
                             }
-
+                            
                             // names must be equal
                             return 0;
                         }
                     });
+                    
+                  
+                    
                 } else {
                     if (key.includes(" ")) {
                         scope.myOrderBy = '"-' + key + '"';
@@ -384,6 +410,10 @@ app.directive("pigeonTable", function ($parse, $http, $cookies) {
             scope.nextPageDisabled = function () {
                 return scope.currentPage === scope.numOfRow ? "disabled" : "";
             };
+            
+            $(scope.data).ready(function () {
+                scope.isLoading = false;
+            });
             
         };
         

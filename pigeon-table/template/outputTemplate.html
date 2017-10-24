@@ -2,7 +2,9 @@
     {{msg}};
 </div>
 
-<div data-ng-if="error == false">
+<div data-ng-show="isLoading" class="spinner"></div>
+
+<div data-ng-if="error == false && isLoading == false">
     <div class="form-horizontal col-xs-12 col-sm-12 col-md-12">
         <div class="form-group col-sm-6 col-md-4">
             <label class="control-label col-sm-4 col-md-3" for="search">Search: </label>
@@ -140,7 +142,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-default" data-ng-click="clearMsg(); clearForm()" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-success" data-ng-click="insert(form, 'INSERT')">Insert</button>
             </div>
         </div>
@@ -167,7 +169,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-default" data-ng-click="clearMsg()" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-success" data-ng-click="insert(selectedData, 'UPDATE')">Edit</button>
             </div>
         </div>

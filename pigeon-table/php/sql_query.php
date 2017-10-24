@@ -61,6 +61,7 @@ if (strpos($sqlQuery->sql, 'SELECT') !== false) {
         $resultData['data'] = $data;
         $resultData['keyTable'] = $tableDetail;
         
+        //print json_encode($resultData, JSON_PRESERVE_ZERO_FRACTION);
         print json_encode($resultData, JSON_NUMERIC_CHECK);
     }
     
@@ -80,10 +81,10 @@ if (strpos($sqlQuery->sql, 'SELECT') !== false) {
                 //Check if the column field same as the key of data from client side
                 if ($key == $row['Field']) {
                     $colTitle .= $key. ', ';
-                    $length = preg_replace("/[^0-9]/","",$row['Type']);
+                    $length = preg_replace("/[^0-9,]/","",$row['Type']);
                     
                     //Check if MySQL table's column type is numeric
-                    if (preg_match("/(tinyint|smallint|mediumint|int|bigint|decimal|float|double)/i", $row['Type'])){
+                    if (preg_match("/(tinyint|smallint|mediumint|int|bigint|float|double)/i", $row['Type'])){
                         //Check if the data is numeric
                         if(is_numeric($value)) {
                             //Check the length of the data
@@ -115,6 +116,17 @@ if (strpos($sqlQuery->sql, 'SELECT') !== false) {
                             }
                         } else {
                             $msg[] = "Please insert number only";  
+                        }
+                    } else if (preg_match("/decimal/i", $row['Type'])){
+                        $decLength = explode(",", $length);
+                        $digitLength = $decLength[0] - $decLength[1];
+                        $dpLength = strlen($value) - strpos($value, ".") - 1;
+                        if ($decLength[0] != strlen($value) - 1 || $decLength[1] != $dpLength) {
+                            $msg[] = "Please insert $digitLength digits with $decLength[1] decimal places.";
+                        } else {
+                            $msg[] = "Validated";
+                            $colField .= "'".$value."', ";
+                            $updateValue .= "$key = '".$value."', ";
                         }
                     } else if (preg_match("/(datetime)/i", $row['Type'])) {
                         if (preg_match("/^(1[0-9]{3}|[1-9][0-9]{3})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\s([0-1][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$/", $value)) {
