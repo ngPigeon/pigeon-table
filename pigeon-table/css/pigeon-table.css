@@ -47,6 +47,10 @@
     margin: 0;
 }
 
+.align-middle   {
+    vertical-align: middle;
+}
+
 /* For desktop view */
 @media (max-width: 1200px) {
     #pagBtn {
@@ -80,5 +84,13 @@
         float: none;
         display: flex;
         justify-content: center;
+    }
+    .xs-center  {
+        float: none;
+        display: flex;
+        justify-content: center;
+    }
+    .xs-margin-bottom   {
+        margin-bottom: 15px;
     }
 }

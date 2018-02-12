@@ -31,15 +31,17 @@ app.directive("pigeonTable", function ($parse, $http, $cookies) {
 
     direc.scope = {
         query : "@",
-        editable: "=editable"
+        editable: "=editable",
+        control: "=control"
     };
     
     
     direc.compile = function () {
         var linkFunction = function (scope, element, attributes) {
-            if (scope.query.includes("SELECT")) {
+            if (scope.query.toUpperCase().includes("SELECT")) {
                 $http.post("pigeon-table/php/sql_query.php", {'sql': scope.query})
                     .then(function (response) {
+
                         scope.isLoading = true;
                         //if returned data is string form which is error message, execute this
                         if ((typeof response.data) === "string") {
@@ -49,12 +51,6 @@ app.directive("pigeonTable", function ($parse, $http, $cookies) {
                             scope.data = response.data.data;
                             scope.keyTable = response.data.keyTable;
                             scope.isLoading = false;
-                            /*
-                            setTimeout(function () {
-                                scope.isLoading = false;
-                                scope.$digest();
-                            }, 2000);
-                            */
                             scope.error = false;
                         }
                     
@@ -80,20 +76,25 @@ app.directive("pigeonTable", function ($parse, $http, $cookies) {
                     
                     });
             } else {
-                scope.msg = "SQL2Table.js only accept SELECT query only";
+                scope.msg = "Pigeon-table only accept SELECT query only";
                 scope.error = true;
             }
             
             //By default, the table is not editable.
             scope.btn = false;
+            scope.ctrlPanel = true;
             
             //Replace the value if the user is specified the value of editable
             if (scope.editable !== undefined) {
                 scope.btn = scope.editable;
             }
             
+            if (scope.control !== undefined) {
+                scope.ctrlPanel = scope.control;
+            }
+
             //Set table as readonly if aggregrate function of table is detected
-            if (scope.query.includes("GROUP BY") || scope.query.includes("JOIN")) {
+            if (scope.query.toUpperCase().includes("GROUP BY") || scope.query.toUpperCase().includes("JOIN")) {
                 scope.btn = false;
             }
             
@@ -250,13 +251,14 @@ app.directive("pigeonTable", function ($parse, $http, $cookies) {
             
             scope.clearMsg = function () {
                 scope.validateMsg = "";
-            }
+            };
             
             scope.clearForm = function () {
-                for (var key in scope.form) {
+                var key;
+                for (key in scope.form) {
                     scope.form[key] = "";
                 }
-            }
+            };
             
             scope.orderBy = function (key) {
                 

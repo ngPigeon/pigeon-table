@@ -5,15 +5,19 @@
 <div data-ng-show="isLoading" class="spinner"></div>
 
 <div data-ng-if="error == false && isLoading == false">
-    <div class="form-horizontal col-xs-12 col-sm-12 col-md-12">
-        <div class="form-group col-sm-6 col-md-4">
+    <div class="row" data-ng-show="ctrlPanel == true">
+        <div class="form-group col-sm-5 col-md-5">
             <label class="control-label col-sm-4 col-md-3" for="search">Search: </label>
             <div class="col-sm-8 col-md-9">
                 <input type="text" id="search" class="form-control" data-ng-model="search[col]" />
             </div>
         </div>
 
-        <div class="form-group col-sm-6 col-md-4">
+        <div class="form-group col-sm-2 col-md-3 xs-center">
+            <input type="checkbox" class="control-label" data-ng-model="exactMatch" /> Exact Match
+        </div>
+
+        <div class="form-group col-sm-5 col-md-4">
             <label class="control-label col-sm-5 col-md-5" for="sort">Search By: </label>
             <div class="col-sm-7 col-md-7">
                 <select id="sort" class="form-control" data-ng-model="col" data-ng-change="clearSearch()">
@@ -22,40 +26,17 @@
                 </select>
             </div>
         </div>
-        
-        <div class="form-group col-sm-6 col-md-3">
-            <label class="control-label col-sm-4 col-md-7" for="numRow">No. of row: </label>
-            <div class="col-sm-8 col-md-5">
-                <select id="numRow" class="form-control" data-ng-model="displayRow" data-ng-change="updateRow(displayRow)">
-                    <option value="5">5</option>
-                    <option data-ng-hide="data.length < 10" value="10">10</option>
-                    <option data-ng-hide="data.length < 15" value="15">15</option>
-                    <option data-ng-hide="data.length < 20" value="20">20</option>
-                    <option data-ng-hide="data.length < 25" value="25">25</option>
-                    <option data-ng-hide="data.length < 50" value="50">50</option>
-                    <option data-ng-hide="data.length < 100" value="100">100</option>
-                    <option value="all">All</option>
-                </select>
-            </div>
-        </div>
-        
-        <div class="col-sm-6 col-md-1">
-            <div id="insertBtn">
-                <button type="button" class="btn btn-info" data-ng-show="btn == true && data != null" data-toggle="modal" data-target="#insertModal">Insert</button>
-            </div>
-            
-        </div>
     </div>
     
-    <div class="form-horizontal col-xs-12 col-sm-12 col-md-12">
-        <div class="form-group col-sm-6 col-md-4">
+    <div class="row" data-ng-show="ctrlPanel == true">
+        <div class="form-group col-sm-5 col-md-5">
             <label class="control-label col-sm-4 col-md-3" for="exclude">Exclude: </label>
             <div class="col-sm-8 col-md-9">
                 <input type="text" id="exclude" class="form-control" data-ng-model="exclude[excludeCol]" />
             </div>
         </div>
 
-        <div class="form-group col-sm-6 col-md-4">
+        <div class="form-group col-sm-5 col-md-4 col-sm-offset-2 col-md-offset-3">
             <label class="control-label col-sm-5 col-md-5" for="excludeSort">Exclude By: </label>
             <div class="col-sm-7 col-md-7">
                 <select id="excludeSort" class="form-control" data-ng-model="excludeCol" data-ng-change="clearExclude(); updateCol(excludeCol)">
@@ -64,12 +45,30 @@
                 </select>
             </div>
         </div>
-        
-        <div class="form-group col-sm-12 col-md-4 no-padding-right" data-ng-init="pageCount(); range();">
-            <div id="pagBtn">
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <div class="form-group col-sm-3 col-md-3 col-sm-push-4 col-md-push-5">
+                <div class="row">
+                    <label class="control-label col-sm-5 col-md-7" for="numRow">No. of row: </label>
+                    <div class="col-sm-7 col-md-5">
+                        <select id="numRow" class="form-control" data-ng-model="displayRow" data-ng-change="updateRow(displayRow)">
+                            <option value="5">5</option>
+                            <option data-ng-hide="data.length < 10" value="10">10</option>
+                            <option data-ng-hide="data.length < 15" value="15">15</option>
+                            <option data-ng-hide="data.length < 20" value="20">20</option>
+                            <option data-ng-hide="data.length < 25" value="25">25</option>
+                            <option data-ng-hide="data.length < 50" value="50">50</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-5 col-md-4 col-sm-push-4 col-md-push-5 xs-center xs-margin-bottom">
                 <tr>
                     <td colspan="{{colNum}}">
-                        <ul class="pagination no-margin">
+                        <ul class="pagination no-margin pull-right">
                             <li data-ng-class="prevPageDisabled()">
                                 <a href="" data-ng-click="firstPage()">&#60;&#60;</a>
                             </li>
@@ -89,10 +88,12 @@
                     </td>
                 </tr>
             </div>
+
+            <div class="col-sm-4 col-md-5 col-sm-pull-8 col-md-pull-7 xs-center xs-margin-bottom">
+                <button type="button" class="btn btn-info" data-ng-show="btn == true && data != null" data-toggle="modal" data-target="#insertModal">Insert</button>
+            </div>
         </div>
     </div>
-    
-    <br />
 
     <div data-ng-if="data == null">
         <p>0 rows of record.</p>
@@ -103,13 +104,13 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th data-ng-repeat="(key, result) in data[0]" data-ng-click="orderBy(key)" id="{{key}}"><a href="" class="table-header">{{key}}<span><img class="caret-full" src="pigeon-table/images/caret_full.png"</img></span></a></th>
+                        <th data-ng-repeat="(key, result) in data[0]" data-ng-click="orderBy(key)" id="{{key}}"><a href="" class="table-header">{{key}}<span><img class="caret-full" src="pigeon-table/images/caret_full.png" /></span></a></th>
                         <th id="editableHeader" data-ng-show="btn == true">Edit/ Delete</th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    <tr data-ng-repeat="user in filtered = (data | filter:search | filter:exclusion) | orderBy:myOrderBy | offset: currentPage*rowPerPage | limitTo: rowPerPage">
+                    <tr data-ng-repeat="user in filtered = (data | filter:search:exactMatch | filter:exclusion) | orderBy:myOrderBy | offset: currentPage*rowPerPage | limitTo: rowPerPage">
                         <td data-ng-repeat="field in user">{{field}}</td>
                         <td data-ng-show="btn == true">
                             <button class="btn btn-warning" data-toggle="modal" data-target="#editModal" data-ng-click="editBtn(user)"><span class="glyphicon glyphicon-edit"></span></button>
@@ -121,6 +122,30 @@
             {{filter(filtered)}}
         </div>
     </div>
+</div>
+
+<div class="col-xs-12" data-ng-init="pageCount(); range();">
+    <tr>
+        <td colspan="{{colNum}}">
+            <ul class="pagination pull-right">
+                <li data-ng-class="prevPageDisabled()">
+                    <a href="" data-ng-click="firstPage()">&#60;&#60;</a>
+                </li>
+                <li data-ng-class="prevPageDisabled()">
+                    <a href="" data-ng-click="prevPage()">&#60;</a>
+                </li>
+                <li data-ng-repeat="n in numForPagiBtns | offsetPageBtn:currentPage | limitTo:3" data-ng-class="{active: n == currentPage}" data-ng-click="setPage(n)">
+                    <a href="">{{n+1}}</a>
+                </li>
+                <li data-ng-class="nextPageDisabled()">
+                    <a href="" data-ng-click="nextPage()">&#62;</a>
+                </li>
+                <li data-ng-class="nextPageDisabled()">
+                    <a href="" data-ng-click="lastPage()">&#62;&#62;</a>
+                </li>
+            </ul>
+        </td>
+    </tr>
 </div>
 
 <div id="insertModal" class="modal fade" role="dialog">

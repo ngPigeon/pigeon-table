@@ -14,7 +14,7 @@ $db = DATABASE;
 $sqlQuery=json_decode(file_get_contents("php://input"));
 
 //Execute this function if sql query is SELECT
-if (strpos($sqlQuery->sql, 'SELECT') !== false) {
+if (strpos(strtoupper($sqlQuery->sql), 'SELECT') !== false) {
     
     $sql=$sqlQuery->sql;
     $rs=$dbhandle->query($sql);
