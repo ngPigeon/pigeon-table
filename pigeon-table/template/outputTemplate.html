@@ -1,47 +1,47 @@
-<div data-ng-show="isLoading" class="spinner"></div>
+<div ng-show="isLoading" class="spinner"></div>
 
 <div ng-if="error == true">
     {{errorMsg}};
 </div>
 
 <div class="col-xs-12 col-sm-12 col-md-12" ng-show="isLoading == false && error == false">
-    <div class="row" data-ng-show="ctrlPanel == true">
+    <div class="row" ng-show="ctrlPanel == true">
         <div class="form-group col-sm-5 col-md-5">
             <label class="control-label col-sm-4 col-md-3" for="search">Search: </label>
             <div class="col-sm-8 col-md-9">
-                <input type="text" id="search" class="form-control" data-ng-model="search[col]" />
+                <input type="text" id="search" class="form-control" ng-model="search[col]" />
             </div>
         </div>
 
         <div class="form-group col-sm-2 col-md-3 xs-center">
-            <input type="checkbox" class="control-label" data-ng-model="exactMatch" /> Exact Match
+            <input type="checkbox" class="control-label" ng-model="exactMatch" /> Exact Match
         </div>
 
         <div class="form-group col-sm-5 col-md-4">
             <label class="control-label col-sm-5 col-md-5" for="sort">Search By: </label>
             <div class="col-sm-7 col-md-7">
-                <select id="sort" class="form-control" data-ng-model="col" data-ng-change="clearSearch()">
+                <select id="sort" class="form-control" ng-model="col" ng-change="clearSearch()">
                     <option value="$">All</option>
-                    <option data-ng-repeat="(key, result) in data[0]" value="{{key}}">{{key}}</option>
+                    <option ng-repeat="(key, result) in data[0]" value="{{key}}">{{key}}</option>
                 </select>
             </div>
         </div>
     </div>
     
-    <div class="row" data-ng-show="ctrlPanel == true">
+    <div class="row" ng-show="ctrlPanel == true">
         <div class="form-group col-sm-5 col-md-5">
             <label class="control-label col-sm-4 col-md-3" for="exclude">Exclude: </label>
             <div class="col-sm-8 col-md-9">
-                <input type="text" id="exclude" class="form-control" data-ng-model="exclude[excludeCol]" />
+                <input type="text" id="exclude" class="form-control" ng-model="exclude[excludeCol]" />
             </div>
         </div>
 
         <div class="form-group col-sm-5 col-md-4 col-sm-offset-2 col-md-offset-3">
             <label class="control-label col-sm-5 col-md-5" for="excludeSort">Exclude By: </label>
             <div class="col-sm-7 col-md-7">
-                <select id="excludeSort" class="form-control" data-ng-model="excludeCol" data-ng-change="clearExclude(); updateCol(excludeCol)">
+                <select id="excludeSort" class="form-control" ng-model="excludeCol" ng-change="clearExclude(); updateCol(excludeCol)">
                     <option value="$">All</option>
-                    <option data-ng-repeat="(key, result) in data[0]" value="{{key}}">{{key}}</option>
+                    <option ng-repeat="(key, result) in data[0]" value="{{key}}">{{key}}</option>
                 </select>
             </div>
         </div>
@@ -55,11 +55,11 @@
                     <div class="col-sm-7 col-md-5">
                         <select id="numRow" class="form-control" ng-model="itemsPerPage">
                             <option value="5">5</option>
-                            <option data-ng-hide="data.length < 10" value="10">10</option>
-                            <option data-ng-hide="data.length < 15" value="15">15</option>
-                            <option data-ng-hide="data.length < 20" value="20">20</option>
-                            <option data-ng-hide="data.length < 25" value="25">25</option>
-                            <option data-ng-hide="data.length < 50" value="50">50</option>
+                            <option ng-hide="data.length < 10" value="10">10</option>
+                            <option ng-hide="data.length < 15" value="15">15</option>
+                            <option ng-hide="data.length < 20" value="20">20</option>
+                            <option ng-hide="data.length < 25" value="25">25</option>
+                            <option ng-hide="data.length < 50" value="50">50</option>
                         </select>
                     </div>
                 </div>
@@ -80,13 +80,13 @@
             <thead>
                 <tr>
                     <th ng-repeat="(key, result) in data[0]" ng-click="ordering(key)" id="{{key}}" class="nowrap"><a href="" class="table-header">{{key}}<span class="caret-full"></span></a></th>
-                    <th class="actionCol" data-ng-show="btn == true && action == true">Edit/ Delete</th>
+                    <th class="actionCol" ng-show="btn == true && action == true">Edit/ Delete</th>
                 </tr>
             </thead>
 
             <tbody>
-                <tr data-ng-repeat="item in filtered = (data | filter:search:exactMatch | filter:exclusion) | orderBy:sortOrder:isReverse | offset: (currentPage-1)*itemsPerPage | limitTo: itemsPerPage">
-                    <td data-ng-repeat="field in item">{{field}}</td>
+                <tr ng-repeat="item in filtered = (data | filter:search:exactMatch | filter:exclusion) | orderBy:sortOrder:isReverse | offset: (currentPage-1)*itemsPerPage | limitTo: itemsPerPage">
+                    <td ng-repeat="field in item">{{field}}</td>
                     <td class="actionCol" ng-show="action == true">
                         <button class="btn btn-warning" ng-click="editBtn(item)"><span class="glyphicon glyphicon-edit"></span></button>
                         <button class="btn btn-danger" ng-click="delBtn(item)"><span class="glyphicon glyphicon-trash"></span></button>
@@ -107,11 +107,11 @@
     <div class="modal-body">
         <div class="spinner" ng-show="modalLoading == true"></div>
         <form class="form-horizontal" ng-show="modalLoading == false">
-            <div class="form-group" data-ng-repeat="(key, result) in selectedData">
+            <div class="form-group" ng-repeat="(key, result) in selectedData">
                 <label class="control-label col-sm-3" for="{{key}}">{{key}}:</label>
                 <div class="col-sm-9">
-                    <input type="text" class="form-control ng-dirty" id="{{key}}" data-ng-model="form[key]">
-                    <span data-ng-show="validateMsg[$index] != 'Validated'" style="color:red; font-style:italic;">{{validateMsg[$index]}}</span>
+                    <input type="text" class="form-control ng-dirty" id="{{key}}" ng-model="form[key]">
+                    <span ng-show="validateMsg[$index] != 'Validated'" style="color:red; font-style:italic;">{{validateMsg[$index]}}</span>
                 </div>
             </div>
         </form>
@@ -124,18 +124,18 @@
 
 <script type="text/ng-template" id="editModal">
     <div class="modal-header">
-        <button type="button" class="close" data-ng-click="close()">&times;</button>
+        <button type="button" class="close" ng-click="close()">&times;</button>
         <h4 class="modal-title">Edit</h4>
     </div>
     <div class="modal-body">
         <div class="spinner" ng-show="modalLoading == true"></div>
         <form class="form-horizontal" ng-show="modalLoading == false">
-            <div class="form-group" data-ng-repeat="(key, result) in selectedData">
+            <div class="form-group" ng-repeat="(key, result) in selectedData">
                 <label class="control-label col-sm-3" for="{{key}}">{{key}}:</label>
                 <div class="col-sm-9">
-                    <input type="text" class="form-control" id="{{key}}" data-ng-model="selectedData[key]" ng-readonly="tableStructure['indexCol'][key] == 'PRI' || tableStructure['indexCol'][key] == 'UNI'">
-                    <span data-ng-show="existed == key" style="color:red; font-style:italic;">The data is existed. Please insert another data.</span>
-                    <span data-ng-show="validateMsg[$index] != 'Validated'" style="color:red; font-style:italic;">{{validateMsg[$index]}}</span>
+                    <input type="text" class="form-control" id="{{key}}" ng-model="selectedData[key]" ng-readonly="tableStructure['indexCol'][key] == 'PRI' || tableStructure['indexCol'][key] == 'UNI'">
+                    <span ng-show="existed == key" style="color:red; font-style:italic;">The data is existed. Please insert another data.</span>
+                    <span ng-show="validateMsg[$index] != 'Validated'" style="color:red; font-style:italic;">{{validateMsg[$index]}}</span>
                 </div>
             </div>
         </form>
