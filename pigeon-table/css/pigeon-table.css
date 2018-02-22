@@ -1,37 +1,59 @@
-.caret-up    {
-    width: 9px;
-    padding-left: 1px;
-    filter: opacity(25%);
-}
-.caret-down    {
-    width: 9px;
-    padding-left: 1px;
-    filter: opacity(25%);
+.table-header:hover > span {
+    filter: opacity(100%);
 }
 
-.caret-full     {
+.caret-full:hover   {
+    filter: opacity(100%);
+}
+
+.caret-up:hover   {
+    filter: opacity(100%);
+}
+
+.caret-down:hover   {
+    filter: opacity(100%);
+}
+
+.caret-full {
+    background-image: url(../images/caret_full.png);
+    background-size: 12px 12px;
+    display: inline-block;
     width: 12px;
+    height: 12px;
+    margin-left: 2px;
     filter: opacity(25%);
 }
 
-.caret-up:hover {
-    filter: opacity(100%);
+.caret-up {
+    background-image: url(../images/caret_up.png);
+    background-size: 12px 12px;
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    margin-left: 2px;
+    filter: opacity(25%);
 }
 
-.caret-down:hover {
-    filter: opacity(100%);
+.caret-down {
+    background-image: url(../images/caret_down.png);
+    background-size: 12px 12px;
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    margin-left: 2px;
+    filter: opacity(25%);
 }
 
-.table-header:hover > span > img   {
-    filter: opacity(100%);
+.nowrap {
+    white-space:nowrap;
 }
 
 .no-padding-right   {
     padding-right: 0;
 }
 
-#editableHeader {
-    width: 10%;
+.actionCol {
+    width: 100px;
 }
 
 #insertBtn  {
@@ -49,6 +71,25 @@
 
 .align-middle   {
     vertical-align: middle;
+}
+
+.padding-bottom    {
+    padding-bottom: 15px;
+}
+
+.spinner {
+    border: 12px solid #f3f3f3; /* Light grey */
+    border-top: 12px solid #fd2121; /* Blue */
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    margin: auto;
+    animation: spin 1.5s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
 /* For desktop view */
