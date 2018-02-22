@@ -1,5 +1,5 @@
 <p align="center">
-  <h3 align="center">Pigeon Table</h3>
+  <h1 align="center">Pigeon Table</h1>
   
   <p align="center">
     A tools that display out the MySQL results in table form dynamically.
