@@ -1,10 +1,10 @@
-<div data-ng-if="error == true">
-    {{msg}};
-</div>
-
 <div data-ng-show="isLoading" class="spinner"></div>
 
-<div data-ng-if="error == false && isLoading == false">
+<div ng-if="error == true">
+    {{errorMsg}};
+</div>
+
+<div class="col-xs-12 col-sm-12 col-md-12" ng-show="isLoading == false && error == false">
     <div class="row" data-ng-show="ctrlPanel == true">
         <div class="form-group col-sm-5 col-md-5">
             <label class="control-label col-sm-4 col-md-3" for="search">Search: </label>
@@ -53,7 +53,7 @@
                 <div class="row">
                     <label class="control-label col-sm-5 col-md-7" for="numRow">No. of row: </label>
                     <div class="col-sm-7 col-md-5">
-                        <select id="numRow" class="form-control" data-ng-model="displayRow" data-ng-change="updateRow(displayRow)">
+                        <select id="numRow" class="form-control" ng-model="itemsPerPage">
                             <option value="5">5</option>
                             <option data-ng-hide="data.length < 10" value="10">10</option>
                             <option data-ng-hide="data.length < 15" value="15">15</option>
@@ -66,155 +66,110 @@
             </div>
 
             <div class="col-sm-5 col-md-4 col-sm-push-4 col-md-push-5 xs-center xs-margin-bottom">
-                <tr>
-                    <td colspan="{{colNum}}">
-                        <ul class="pagination no-margin pull-right">
-                            <li data-ng-class="prevPageDisabled()">
-                                <a href="" data-ng-click="firstPage()">&#60;&#60;</a>
-                            </li>
-                            <li data-ng-class="prevPageDisabled()">
-                                <a href="" data-ng-click="prevPage()">&#60;</a>
-                            </li>
-                            <li data-ng-repeat="n in numForPagiBtns | offsetPageBtn:currentPage | limitTo:3" data-ng-class="{active: n == currentPage}" data-ng-click="setPage(n)">
-                                <a href="">{{n+1}}</a>
-                            </li>
-                            <li data-ng-class="nextPageDisabled()">
-                                <a href="" data-ng-click="nextPage()">&#62;</a>
-                            </li>
-                            <li data-ng-class="nextPageDisabled()">
-                                <a href="" data-ng-click="lastPage()">&#62;&#62;</a>
-                            </li>
-                        </ul>
-                    </td>
-                </tr>
+                <ul uib-pagination class="pagination-md no-margin pull-right" boundary-links="true" total-items="data.length" ng-model="currentPage" max-size="3" items-per-page="itemsPerPage" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></ul>
             </div>
 
             <div class="col-sm-4 col-md-5 col-sm-pull-8 col-md-pull-7 xs-center xs-margin-bottom">
-                <button type="button" class="btn btn-info" data-ng-show="btn == true && data != null" data-toggle="modal" data-target="#insertModal">Insert</button>
+                <button type="button" class="btn btn-info" ng-show="btn == true && data != null" ng-click="insertBtn()">Insert</button>
             </div>
         </div>
-    </div>
-
-    <div data-ng-if="data == null">
-        <p>0 rows of record.</p>
     </div>
     
-    <div class="col-xs-12 col-sm-12 col-md-12">
-        <div data-ng-if="data != null" class="table-responsive">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th data-ng-repeat="(key, result) in data[0]" data-ng-click="orderBy(key)" id="{{key}}"><a href="" class="table-header">{{key}}<span><img class="caret-full" src="pigeon-table/images/caret_full.png" /></span></a></th>
-                        <th id="editableHeader" data-ng-show="btn == true">Edit/ Delete</th>
-                    </tr>
-                </thead>
+    <div ng-if="data != null" class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th ng-repeat="(key, result) in data[0]" ng-click="ordering(key)" id="{{key}}" class="nowrap"><a href="" class="table-header">{{key}}<span class="caret-full"></span></a></th>
+                    <th class="actionCol" data-ng-show="btn == true && action == true">Edit/ Delete</th>
+                </tr>
+            </thead>
 
-                <tbody>
-                    <tr data-ng-repeat="user in filtered = (data | filter:search:exactMatch | filter:exclusion) | orderBy:myOrderBy | offset: currentPage*rowPerPage | limitTo: rowPerPage">
-                        <td data-ng-repeat="field in user">{{field}}</td>
-                        <td data-ng-show="btn == true">
-                            <button class="btn btn-warning" data-toggle="modal" data-target="#editModal" data-ng-click="editBtn(user)"><span class="glyphicon glyphicon-edit"></span></button>
-                            <button class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" data-ng-click="deleteBtn(user)"><span class="glyphicon glyphicon-trash"></span></button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            {{filter(filtered)}}
-        </div>
+            <tbody>
+                <tr data-ng-repeat="item in filtered = (data | filter:search:exactMatch | filter:exclusion) | orderBy:sortOrder:isReverse | offset: (currentPage-1)*itemsPerPage | limitTo: itemsPerPage">
+                    <td data-ng-repeat="field in item">{{field}}</td>
+                    <td class="actionCol" ng-show="action == true">
+                        <button class="btn btn-warning" ng-click="editBtn(item)"><span class="glyphicon glyphicon-edit"></span></button>
+                        <button class="btn btn-danger" ng-click="delBtn(item)"><span class="glyphicon glyphicon-trash"></span></button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
+
+    <ul uib-pagination class="pagination-md no-margin padding-bottom pull-right" boundary-links="true" total-items="data.length" ng-model="currentPage" max-size="3" items-per-page="itemsPerPage" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></ul>
 </div>
 
-<div class="col-xs-12" data-ng-init="pageCount(); range();">
-    <tr>
-        <td colspan="{{colNum}}">
-            <ul class="pagination pull-right">
-                <li data-ng-class="prevPageDisabled()">
-                    <a href="" data-ng-click="firstPage()">&#60;&#60;</a>
-                </li>
-                <li data-ng-class="prevPageDisabled()">
-                    <a href="" data-ng-click="prevPage()">&#60;</a>
-                </li>
-                <li data-ng-repeat="n in numForPagiBtns | offsetPageBtn:currentPage | limitTo:3" data-ng-class="{active: n == currentPage}" data-ng-click="setPage(n)">
-                    <a href="">{{n+1}}</a>
-                </li>
-                <li data-ng-class="nextPageDisabled()">
-                    <a href="" data-ng-click="nextPage()">&#62;</a>
-                </li>
-                <li data-ng-class="nextPageDisabled()">
-                    <a href="" data-ng-click="lastPage()">&#62;&#62;</a>
-                </li>
-            </ul>
-        </td>
-    </tr>
-</div>
-
-<div id="insertModal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Insert</h4>
+<script type="text/ng-template" id="insertModal">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="close()">&times;</button>
+        <h4 class="modal-title">Insert</h4>
+    </div>
+    <div class="modal-body">
+        <div class="spinner" ng-show="modalLoading == true"></div>
+        <form class="form-horizontal" ng-show="modalLoading == false">
+            <div class="form-group" data-ng-repeat="(key, result) in selectedData">
+                <label class="control-label col-sm-3" for="{{key}}">{{key}}:</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control ng-dirty" id="{{key}}" data-ng-model="form[key]">
+                    <span data-ng-show="validateMsg[$index] != 'Validated'" style="color:red; font-style:italic;">{{validateMsg[$index]}}</span>
+                </div>
             </div>
-            <div class="modal-body">
-                <form class="form-horizontal">
-                    <div class="form-group" data-ng-repeat="(key, result) in data[0]">
-                        <label class="control-label col-sm-2" for="{{key}}">{{key}}:</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" id="{{key}}" data-ng-model="form[key]">
-                            <span data-ng-show="validateMsg[$index] != 'Validated'" style="color:red; font-style:italic;">{{validateMsg[$index]}}</span>
-                        </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" ng-click="close()">Close</button>
+        <button type="button" class="btn btn-success" ng-click="submit()">Insert</button>
+    </div>
+</script>
+
+<script type="text/ng-template" id="editModal">
+    <div class="modal-header">
+        <button type="button" class="close" data-ng-click="close()">&times;</button>
+        <h4 class="modal-title">Edit</h4>
+    </div>
+    <div class="modal-body">
+        <div class="spinner" ng-show="modalLoading == true"></div>
+        <form class="form-horizontal" ng-show="modalLoading == false">
+            <div class="form-group" data-ng-repeat="(key, result) in selectedData">
+                <label class="control-label col-sm-3" for="{{key}}">{{key}}:</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="{{key}}" data-ng-model="selectedData[key]" ng-readonly="tableStructure['indexCol'][key] == 'PRI' || tableStructure['indexCol'][key] == 'UNI'">
+                    <span data-ng-show="existed == key" style="color:red; font-style:italic;">The data is existed. Please insert another data.</span>
+                    <span data-ng-show="validateMsg[$index] != 'Validated'" style="color:red; font-style:italic;">{{validateMsg[$index]}}</span>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" ng-click="close()">Close</button>
+        <button type="button" class="btn btn-success" ng-click="submit()">Edit</button>
+    </div>
+</script>
+
+<script type="text/ng-template" id="deleteModal">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="close()">&times;</button>
+        <h4 class="modal-title">Delete</h4>
+    </div>
+    <div class="modal-body">
+        <div class="spinner" ng-show="modalLoading == true"></div>
+        <div ng-show="modalLoading == false">
+            <p>Are you sure you want to delete?</p>
+
+            <br />
+
+            <form class="form-horizontal">
+                <div class="form-group" ng-repeat="(key, result) in selectedData">
+                    <label class="col-sm-4 control-label">{{key}}</label>
+                    <div class="col-sm-8">
+                        <p class="form-control-static">{{result}}</p>
                     </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-ng-click="clearMsg(); clearForm()" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-success" data-ng-click="insert(form, 'INSERT')">Insert</button>
-            </div>
+                </div>
+            </form>
         </div>
     </div>
-</div>
-
-<div id="editModal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Edit</h4>
-            </div>
-            <div class="modal-body">
-                <form class="form-horizontal">
-                    <div class="form-group" data-ng-repeat="(key, result) in selectedData">
-                        <label class="control-label col-sm-2" for="{{key}}">{{key}}:</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" id="{{key}}" data-ng-model="selectedData[key]" data-ng-readonly="keyTable[$index]['Key'] == 'PRI'">
-                            <span data-ng-show="existed == key" style="color:red; font-style:italic;">The data is existed. Please insert another data.</span>
-                            <span data-ng-show="validateMsg[$index] != 'Validated'" style="color:red; font-style:italic;">{{validateMsg[$index]}}</span>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-ng-click="clearMsg()" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-success" data-ng-click="insert(selectedData, 'UPDATE')">Edit</button>
-            </div>
-        </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" ng-click="close()">Close</button>
+        <button type="button" class="btn btn-danger" ng-click="submit()">Delete</button>
     </div>
-</div>
-
-<div id="deleteModal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Delete</h4>
-            </div>
-            <div class="modal-body">
-                <p>Are you sure you want to delete?</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-danger" data-ng-click="del(selectedData, 'DELETE')" data-dismiss="modal">Delete</button>
-            </div>
-        </div>
-    </div>
-</div>
+</script>
