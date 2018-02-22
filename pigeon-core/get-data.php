@@ -1,7 +1,7 @@
 <?php
 
     //Turn off PHP error reporting
-    //error_reporting(0);
+    error_reporting(0);
 
     require "configdb.php";
 
