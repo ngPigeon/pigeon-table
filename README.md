@@ -4,7 +4,7 @@
   <p align="center">
     A tools that display out the MySQL results in table form dynamically.
     <br />
-    <a href="https://ngpigeon.github.io/pigeon-table/"><strong>Pigeon Table Documentation »</strong></a>
+    <a href="https://ngpigeon.github.io/pigeon-table"><strong>Pigeon Table Documentation »</strong></a>
   </p>
 </p>
 
