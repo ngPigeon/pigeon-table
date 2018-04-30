@@ -66,7 +66,7 @@
             </div>
 
             <div class="col-sm-5 col-md-4 col-sm-push-4 col-md-push-5 xs-center xs-margin-bottom">
-                <ul uib-pagination class="pagination-md no-margin pull-right" boundary-links="true" total-items="data.length" ng-model="currentPage" max-size="3" items-per-page="itemsPerPage" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></ul>
+                <ul uib-pagination class="pagination-md no-margin pull-right" boundary-links="true" total-items="filtered.length" ng-model="currentPage" max-size="3" items-per-page="itemsPerPage" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></ul>
             </div>
 
             <div class="col-sm-4 col-md-5 col-sm-pull-8 col-md-pull-7 xs-center xs-margin-bottom">
@@ -85,7 +85,7 @@
             </thead>
 
             <tbody>
-                <tr ng-repeat="item in filtered = (data | filter:search:exactMatch | filter:exclusion) | orderBy:sortOrder:isReverse | offset: (currentPage-1)*itemsPerPage | limitTo: itemsPerPage">
+                <tr ng-repeat="item in $parent.filtered = (data | filter:search:exactMatch | filter:exclusion) | orderBy:sortOrder:isReverse | offset: (currentPage-1)*itemsPerPage | limitTo: itemsPerPage">
                     <td ng-repeat="field in item">{{field}}</td>
                     <td class="actionCol" ng-show="btn == true && action == true">
                         <button class="btn btn-warning" ng-click="editBtn(item)"><span class="glyphicon glyphicon-edit"></span></button>
@@ -96,7 +96,8 @@
         </table>
     </div>
 
-    <ul uib-pagination class="pagination-md no-margin padding-bottom pull-right" boundary-links="true" total-items="data.length" ng-model="currentPage" max-size="3" items-per-page="itemsPerPage" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></ul>
+    <ul uib-pagination class="pagination-md no-margin padding-bottom pull-right" boundary-links="true" total-items="filtered.length" ng-model="currentPage" max-size="3" items-per-page="itemsPerPage" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></ul>
+
 </div>
 
 <script type="text/ng-template" id="insertModal">
