@@ -87,7 +87,7 @@
             <tbody>
                 <tr ng-repeat="item in filtered = (data | filter:search:exactMatch | filter:exclusion) | orderBy:sortOrder:isReverse | offset: (currentPage-1)*itemsPerPage | limitTo: itemsPerPage">
                     <td ng-repeat="field in item">{{field}}</td>
-                    <td class="actionCol" ng-show="action == true">
+                    <td class="actionCol" ng-show="btn == true && action == true">
                         <button class="btn btn-warning" ng-click="editBtn(item)"><span class="glyphicon glyphicon-edit"></span></button>
                         <button class="btn btn-danger" ng-click="delBtn(item)"><span class="glyphicon glyphicon-trash"></span></button>
                     </td>
